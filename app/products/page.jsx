@@ -7,7 +7,7 @@ const getProducts = async () => {
   });
   return res.json();
 };
-
+// ok
 const page = async () => {
   const products = await getProducts();
 
