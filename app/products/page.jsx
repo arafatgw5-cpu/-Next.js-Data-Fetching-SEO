@@ -1,98 +1,161 @@
-import Image from "next/image";
-import { ShoppingCart, Heart, Eye, Star } from "lucide-react";
+"use client";
 
-const getProducts = async () => {
-  const res = await fetch("http://localhost:4000/products", {
-    cache: "no-store",
-  });
-  return res.json();
-};
-// ok
-const page = async () => {
-  const products = await getProducts();
+import React, { useState, useEffect } from 'react';
+
+// Component for the individual photo cards
+const PhotoCard = ({ src, alt, rotation, text, index, style = {} }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), 700 + (index * 300));
+    return () => clearTimeout(timer);
+  }, [index]);
+
+  const cardStyle = {
+    position: 'absolute',
+    transform: `rotate(${rotation}deg) ${isHovered ? `rotate(${rotation + 2}deg) scale(1.05)` : `rotate(${rotation}deg) scale(1)`}`,
+    zIndex: isHovered ? 20 : (index === 1 ? 2 : 1),
+    transition: 'all 0.3s ease-out',
+    opacity: isVisible ? 1 : 0,
+    ...style
+  };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] p-8">
-      <h1 className="text-4xl font-extrabold text-center mb-10 text-gray-800">
-        🛍️ Featured Products
-      </h1>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7">
-        {products.map((product) => (
-          <div
-            key={product.id}
-            className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden group"
-          >
-            {/* Image Area */}
-            <div className="relative bg-gray-100 h-48 flex items-center justify-center">
-              
-              {/* Discount Badge */}
-              <span className="absolute top-3 left-3 bg-red-500 text-white text-xs px-2 py-1 rounded-lg font-semibold">
-                -20%
-              </span>
-
-              {/* Icons */}
-              <div className="absolute right-3 top-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition">
-                <button className="bg-white p-2 rounded-full shadow hover:bg-gray-100">
-                  <Heart size={16} />
-                </button>
-                <button className="bg-white p-2 rounded-full shadow hover:bg-gray-100">
-                  <Eye size={16} />
-                </button>
-              </div>
-
-              <Image
-                src={product.thumbnail}
-                alt={product.title}
-                fill
-                className="object-contain p-4"
-              />
-            </div>
-
-            {/* Content */}
-            <div className="p-4">
-              
-              {/* Category */}
-              <p className="text-xs text-gray-400 uppercase mb-1">
-                Electronics
-              </p>
-
-              {/* Title */}
-              <h2 className="text-sm font-semibold text-gray-800 line-clamp-2 mb-2">
-                {product.title}
-              </h2>
-
-              {/* Rating */}
-              <div className="flex items-center gap-1 text-yellow-500 text-sm mb-2">
-                <Star size={14} fill="currentColor" />
-                <Star size={14} fill="currentColor" />
-                <Star size={14} fill="currentColor" />
-                <Star size={14} fill="currentColor" />
-                <Star size={14} className="text-gray-300" />
-                <span className="text-gray-500 ml-1 text-xs">(4.0)</span>
-              </div>
-
-              {/* Price */}
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-lg font-bold text-blue-600">
-                  ${product.price}
-                </span>
-                <span className="text-sm line-through text-gray-400">
-                  ${product.price + 20}
-                </span>
-              </div>
-
-              {/* Button */}
-              <button className="w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-xl text-sm font-medium hover:bg-black hover:text-white transition">
-                <ShoppingCart size={16} />
-                Add to Cart
-              </button>
-            </div>
-          </div>
-        ))}
+    <div
+      className="w-[162px] h-[240px] bg-white p-2 rounded-md shadow-2xl cursor-pointer"
+      style={cardStyle}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="w-full h-[85%] bg-muted rounded-sm overflow-hidden">
+        <img
+          src={src}
+          alt={alt}
+          className="w-full h-full object-cover transition-transform duration-300"
+          style={{ transform: isHovered ? 'scale(1.02)' : 'scale(1)' }}
+          onLoad={() => setIsLoaded(true)}
+          onError={(e) => { 
+            e.target.onerror = null; 
+            e.target.src='https://placehold.co/162x200/e2e8f0/94a3b8?text=Image';
+            setIsLoaded(true);
+          }}
+        />
+      </div>
+      <div className="h-[15%] flex items-center justify-center">
+        <p style={{ fontFamily: '"Zeyada", cursive' }} className="text-sm text-muted-foreground tracking-tighter text-center">
+          {text}
+        </p>
       </div>
     </div>
   );
 };
 
-export default page;
+// Animated Gradient Grid Background Component
+const AnimatedGrid = () => {
+  const [offset, setOffset] = useState(0);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setOffset(prev => (prev + 0.5) % 40);
+    }, 80);
+    return () => clearInterval(interval);
+  }, []);
+  
+  return (
+    <div className="absolute inset-0 pointer-events-none">
+      {/* Main grid with gradient fade - Light theme */}
+      <div 
+        className="absolute inset-0 dark:hidden"
+        style={{
+          background: `
+            radial-gradient(circle at 50% 50%, transparent 0%, #ffffff 50%, #ffffff 100%),
+            linear-gradient(#e5e7eb 1px, transparent 1px),
+            linear-gradient(90deg, #e5e7eb 1px, transparent 1px)
+          `,
+          backgroundSize: 'cover, 40px 40px, 40px 40px',
+          backgroundPosition: `center, ${offset}px ${offset}px, ${offset}px ${offset}px`,
+        }}
+      />
+      
+      {/* Main grid with gradient fade - Dark theme */}
+      <div 
+        className="absolute inset-0 hidden dark:block bg-background"
+        style={{
+          background: `
+            radial-gradient(circle at 50% 50%, transparent 0%, #0f172a 50%, #0f172a 100%),
+            linear-gradient(#374151 1px, transparent 1px),
+            linear-gradient(90deg, #374151 1px, transparent 1px)
+          `,
+          backgroundSize: 'cover, 40px 40px, 40px 40px',
+          backgroundPosition: `center, ${offset}px ${offset}px, ${offset}px ${offset}px`,
+        }}
+      />
+      
+      {/* Subtle moving overlay for depth - Light theme */}
+      <div 
+        className="absolute inset-0 opacity-30 dark:hidden"
+        style={{
+          background: `
+            radial-gradient(circle at ${50 + Math.sin(offset * 0.1) * 20}% ${50 + Math.cos(offset * 0.1) * 20}%, rgba(107, 114, 128, 0.1) 0%, transparent 60%)
+          `,
+        }}
+      />
+      
+      {/* Subtle moving overlay for depth - Dark theme */}
+      <div 
+        className="absolute inset-0 opacity-30 hidden dark:block"
+        style={{
+          background: `
+            radial-gradient(circle at ${50 + Math.sin(offset * 0.1) * 20}% ${50 + Math.cos(offset * 0.1) * 20}%, rgba(156, 163, 175, 0.15) 0%, transparent 60%)
+          `,
+        }}
+      />
+    </div>
+  );
+};
+
+// Main Component
+const Component = () => {
+  return (
+    <>
+      {/* Adding the Google Font 'Zeyada' for the handwritten text */}
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+      <link href="https://fonts.googleapis.com/css2?family=Zeyada&display=swap" rel="stylesheet" />
+
+      <div className="bg-background min-h-screen flex items-center justify-center w-full p-8 relative">
+        
+        {/* Animated Grid Background */}
+        <AnimatedGrid />
+        
+        {/* Photo Cards Container - positioned exactly like your image */}
+        <div className="relative w-[300px] h-[300px] flex items-center justify-center">
+          
+          {/* Back Photo Card - rotated left, positioned behind */}
+          <PhotoCard
+            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=500&fit=crop"
+            alt="Mountain landscape with person standing in field"
+            rotation={-8}
+            text="Mountain Memories"
+            index={0}
+            style={{ top: '20px', left: '0px' }}
+          />
+          
+          {/* Front Photo Card - rotated right, positioned on top */}
+          <PhotoCard
+            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=500&fit=crop"
+            alt="Portrait photography close-up"
+            rotation={15}
+            text="Portrait Collection"
+            index={1}
+            style={{ top: '10px', right: '0px' }}
+          />
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Component;

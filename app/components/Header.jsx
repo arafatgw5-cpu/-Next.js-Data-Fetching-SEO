@@ -38,6 +38,12 @@ export default function Navbar() {
           >
            Products
           </Link>
+         <Link
+            href="/books"
+            className="hover:bg-gray-100 rounded-lg font-bold text-2xl px-3 py-2 transition"
+          >
+           Books
+          </Link>
 
        
 

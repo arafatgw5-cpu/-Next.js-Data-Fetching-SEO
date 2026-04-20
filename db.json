@@ -50,5 +50,57 @@
       "stock": 40,
       "thumbnail": "https://www.startech.com.bd/image/cache/catalog/laptop-stand/yuanxin/x-zj801/x-zj801-01-500x500.webp"
     }
+  ],
+  "books": [
+    {
+      "id": 1,
+      "title": "Atomic Habits",
+      "author": "James Clear",
+      "price": 15.99,
+      "category": "Self Development",
+      "rating": 4.8,
+      "stock": 20,
+      "thumbnail": "https://covers.openlibrary.org/b/id/10523338-L.jpg"
+    },
+    {
+      "id": 2,
+      "title": "Rich Dad Poor Dad",
+      "author": "Robert Kiyosaki",
+      "price": 12.50,
+      "category": "Finance",
+      "rating": 4.6,
+      "stock": 15,
+      "thumbnail": "https://covers.openlibrary.org/b/id/8231996-L.jpg"
+    },
+    {
+      "id": 3,
+      "title": "The Alchemist",
+      "author": "Paulo Coelho",
+      "price": 10.99,
+      "category": "Novel",
+      "rating": 4.7,
+      "stock": 25,
+      "thumbnail": "https://covers.openlibrary.org/b/id/8100925-L.jpg"
+    },
+    {
+      "id": 4,
+      "title": "Think and Grow Rich",
+      "author": "Napoleon Hill",
+      "price": 13.75,
+      "category": "Motivation",
+      "rating": 4.5,
+      "stock": 18,
+      "thumbnail": "https://covers.openlibrary.org/b/id/7222246-L.jpg"
+    },
+    {
+      "id": 5,
+      "title": "Deep Work",
+      "author": "Cal Newport",
+      "price": 16.20,
+      "category": "Productivity",
+      "rating": 4.7,
+      "stock": 12,
+      "thumbnail": "https://covers.openlibrary.org/b/id/9251996-L.jpg"
+    }
   ]
 }
